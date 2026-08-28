@@ -40,14 +40,7 @@ public class MovieService {
         movie.setTitle(dto.getTitle());
         movie.setDescription(dto.getDescription());
         movie.setImageUrl(dto.getImageUrl());
-        movie.setMovieType(dto.getType());
 
-        if (dto.getParentId() != null){
-            Movie parent = movieRepository.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("Bunday kino mavjud emas!"));
-            movie.setParent(parent);
-        }
-
-        movie.setOrderNumber(dto.getOrderNumber());
 
         List<MovieSourceDto> sources = dto.getSources();
         if (sources != null && !sources.isEmpty()){

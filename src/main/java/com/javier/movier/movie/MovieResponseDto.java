@@ -17,7 +17,6 @@ public class MovieResponseDto {
     private String imageUrl;
     private List<MovieSourceDto> sources;
     private List<CategoryDto> categories;
-    private List<MovieResponseDto> children;
 
     public MovieResponseDto(Movie m) {
         this.id = m.getId();
@@ -26,6 +25,5 @@ public class MovieResponseDto {
         this.imageUrl = m.getImageUrl();
         this.categories = m.getCategories().stream().map(CategoryDto::new).toList();
         this.sources = m.getMovieSources().stream().map(MovieSourceDto::new).toList();
-        this.children = m.getChildren().stream().map(MovieResponseDto::new).toList();
     }
 }

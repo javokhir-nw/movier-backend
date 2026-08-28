@@ -18,11 +18,6 @@ import java.util.UUID;
 @Table(name = "movies")
 public class Movie {
 
-    public enum MovieType {
-        MOVIE,
-        SERIAL
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -33,18 +28,6 @@ public class Movie {
     private String description;
 
     private String imageUrl;
-
-    @Enumerated(EnumType.STRING)
-    public MovieType movieType = MovieType.MOVIE;
-
-    private int orderNumber = 0;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Movie parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Movie> children = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
