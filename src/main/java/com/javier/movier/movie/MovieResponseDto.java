@@ -5,6 +5,7 @@ import com.javier.movier.moviesource.MovieSourceDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +25,9 @@ public class MovieResponseDto {
         this.description = m.getDescription();
         this.imageUrl = m.getImageUrl();
         this.categories = m.getCategories().stream().map(CategoryDto::new).toList();
-        this.sources = m.getMovieSources().stream().map(MovieSourceDto::new).toList();
+        this.sources = m.getMovieSources().stream()
+                .map(MovieSourceDto::new)
+                .sorted(Comparator.comparing(MovieSourceDto::getOrderNumber))
+                .toList();
     }
 }
