@@ -20,7 +20,7 @@ public class MovieController {
     @PostMapping("/upsert")
     @PreAuthorize("hasAuthority('upsert movie')")
     public ResponseEntity<?> upsert(@RequestBody MovieRequestDto dto) {
-        return ResponseEntity.ok(movieService.upsert(dto));
+        return ResponseEntity.ok(movieService.upsertMovie(dto));
     }
 
     @PostMapping("/list")
