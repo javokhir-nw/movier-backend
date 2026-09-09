@@ -79,7 +79,11 @@ public class DataInitializer implements CommandLineRunner {
         Set<Permission> permissions = new HashSet<>();
 
         Map<String, Permission> existPermissions = permissionRepository.findAll().stream()
-                .collect(Collectors.toMap(Permission::getName, Function.identity()));
+                .collect(Collectors.toMap(
+                        Permission::getName,
+                        Function.identity(),
+                        (a, b) -> a
+                ));
 
         context.getBeansWithAnnotation(RestController.class).values().forEach(bean -> {
             for (Method method : bean.getClass().getMethods()) {
