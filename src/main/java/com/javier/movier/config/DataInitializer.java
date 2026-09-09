@@ -9,6 +9,7 @@ import com.javier.movier.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +29,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
+    @Value("${init.username}")
+    private String initUsername;
+
+    @Value("${init.password}")
+    private String initPassword;
+
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final UserRepository userRepository;
@@ -39,17 +46,15 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String @NonNull ... args) {
         Set<Permission> list = scanAndSavePermissions();
-        Role userRole = initRole("user", "USER", new HashSet<>());
         Role adminRole = initRole("admin", "ADMIN", list);
-        initUser("user", userRole);
-        initUser("admin", adminRole);
+        initUser(initUsername, adminRole);
     }
 
     private void initUser(String username, Role role) {
         if (!userRepository.existsByUsername(username)) {
             User u = new User();
             u.setUsername(username);
-            u.setPassword(passwordEncoder.encode("123"));
+            u.setPassword(passwordEncoder.encode(initPassword));
             u.setRole(role);
             userRepository.save(u);
         }
