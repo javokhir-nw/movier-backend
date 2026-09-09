@@ -34,7 +34,7 @@ public class SecurityConfig {
 
     private static final String[] WHITE_LIST = {
             "/auth/**",
-            "/test",
+            "/test/**",
             "/movie/list",
             "/movie/get/{id}",
             "/category/list",
