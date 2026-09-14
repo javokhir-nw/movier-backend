@@ -49,6 +49,9 @@ public class Movie {
     @OneToMany(mappedBy = "movie",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MovieSource> movieSources = new ArrayList<>();
 
+    @Column(name = "view_count")
+    private Integer viewCount = 0;
+
     //todo for series
 
     @ManyToOne

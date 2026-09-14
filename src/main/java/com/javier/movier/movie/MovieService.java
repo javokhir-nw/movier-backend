@@ -16,6 +16,9 @@ import com.javier.movier.utils.Search;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,10 @@ public class MovieService {
     private final SourceRepository sourceRepository;
     private final MovieSeasonRepository movieSeasonRepository;
 
+    @Caching(evict = {
+            @CacheEvict(value = "movies", key = "#dto.id"),
+            @CacheEvict(value = "movieList", allEntries = true)
+    })
     public UUID upsertMovie(MovieRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
@@ -42,6 +49,10 @@ public class MovieService {
         return saveMovie(movie);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "movies", key = "#dto.id"),
+            @CacheEvict(value = "movieList", allEntries = true)
+    })
     public UUID upsertSeries(SeriesRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
@@ -49,6 +60,9 @@ public class MovieService {
         return saveMovie(movie);
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "movies", key = "#dto.id")
+    })
     public UUID upsertEpisodes(EpisodeRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
@@ -69,12 +83,14 @@ public class MovieService {
         return saveMovie(movie);
     }
 
+    @Cacheable(value = "movieList", key = "#pagination.page() + '-' + #pagination.size() + '-' + #pagination.search()")
     public PageWrapper list(Pagination<Search> pagination) {
         Search search = pagination.search();
         Page<MovieResponseDto> page = movieRepository.findAll(search.value(), search.categoryId(), search.type(), PageRequest.of(pagination.page(), pagination.size()));
         return PageWrapper.builder().content(page.getContent()).total(page.getTotalElements()).build();
     }
 
+    @Cacheable(value = "movies", key = "#id")
     public MovieResponseDto getById(UUID id) {
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Bunday film mavjud emas!"));
         MovieResponseDto dto = new MovieResponseDto(movie);

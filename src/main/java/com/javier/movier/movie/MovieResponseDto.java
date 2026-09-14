@@ -19,6 +19,7 @@ public class MovieResponseDto {
     private String imageUrl;
     private Integer orderNumber;
     private MovieType type;
+    private Integer viewCount = 0;
     private List<MovieSourceDto> sources;
     private List<CategoryDto> categories;
     private List<MovieResponseDto> episodes;
@@ -27,6 +28,7 @@ public class MovieResponseDto {
     public MovieResponseDto(Movie m) {
         this.id = m.getId();
         this.title = m.getTitle();
+        this.viewCount = m.getViewCount();
         this.orderNumber = m.getOrderNumber();
         this.description = m.getDescription();
         this.type = m.getType();

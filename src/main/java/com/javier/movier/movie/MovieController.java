@@ -1,7 +1,11 @@
 package com.javier.movier.movie;
 
+import com.javier.movier.cache.ViewService;
 import com.javier.movier.utils.Pagination;
 import com.javier.movier.utils.Search;
+import com.javier.movier.utils.UtilService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +19,8 @@ import java.util.UUID;
 public class MovieController {
 
     private final MovieService movieService;
+    private final UtilService utilService;
+    private final ViewService viewService;
 
 
     @PostMapping("/upsert")
@@ -29,7 +35,13 @@ public class MovieController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<?> getById(@PathVariable UUID id){
+    public ResponseEntity<?> getById(@PathVariable UUID id,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response
+                                     ){
+        String visitorId = utilService.getOrCreateVisitorId(request, response);
+        viewService.increment(visitorId,id.toString());
+
         return ResponseEntity.ok(movieService.getById(id));
     }
 }

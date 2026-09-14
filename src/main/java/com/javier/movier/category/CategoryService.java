@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public String upsert(CategoryDto dto) {
         Long id = dto.getId();
         Category category;
@@ -34,6 +37,7 @@ public class CategoryService {
         return categoryId.toString();
     }
 
+    @Cacheable(value = "categories")
     public List<CategoryDto> list() {
         return categoryRepository.findAll().stream().map(CategoryDto::new).toList();
     }
