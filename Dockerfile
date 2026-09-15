@@ -14,6 +14,9 @@ COPY pom.xml .
 #   Sabab: agar keyinroq faqat kod o'zgarsa, Docker bu qatorlarni
 #   qaytadan bajarmaydi (cache'dan foydalanadi) — build tezlashadi
 
+RUN chmod +x mvnw
+#   mvnw faylida execute (ishga tushirish) huquqini berish
+
 RUN ./mvnw dependency:go-offline -B
 # ^ pom.xml asosida barcha kutubxonalarni yuklab, cache qiladi
 #   (internetdan hali kod yozilmasdan oldin yuklaydi)
