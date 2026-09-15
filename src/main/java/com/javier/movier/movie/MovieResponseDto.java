@@ -4,6 +4,7 @@ import com.javier.movier.category.CategoryDto;
 import com.javier.movier.movieseason.MovieSeasonResponseDto;
 import com.javier.movier.moviesource.MovieSourceDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Comparator;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class MovieResponseDto {
     private UUID id;
     private String title;
