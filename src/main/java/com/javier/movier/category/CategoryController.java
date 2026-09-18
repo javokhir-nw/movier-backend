@@ -15,11 +15,11 @@ public class CategoryController {
     @PostMapping("/upsert")
     @PreAuthorize("hasAuthority('upsert category')")
     public ResponseEntity<?> upsert(@RequestBody CategoryDto categoryRequestDto){
-        return ResponseEntity.ok(categoryService.upsert(categoryRequestDto));
+        return ResponseEntity.status(201).body(categoryService.upsert(categoryRequestDto));
     }
 
     @GetMapping("/list")
     public ResponseEntity<?> list(){
-        return ResponseEntity.ok(categoryService.list());
+        return ResponseEntity.status(200).body(categoryService.list());
     }
 }

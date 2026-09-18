@@ -1,10 +1,12 @@
 package com.javier.movier.source;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class SourceDto {
     private Long id;
     private String name;

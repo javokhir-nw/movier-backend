@@ -38,7 +38,8 @@ public class MovieService {
     private final MovieSeasonRepository movieSeasonRepository;
 
     @Caching(evict = {
-            @CacheEvict(value = "movies", key = "#dto.id")
+            @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
+            @CacheEvict(value = "moviesList", allEntries = true)
     })
     public UUID upsertMovie(MovieRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
@@ -49,7 +50,8 @@ public class MovieService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = "movies", key = "#dto.id")
+            @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
+            @CacheEvict(value = "moviesList", allEntries = true)
     })
     public UUID upsertSeries(SeriesRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
@@ -59,7 +61,9 @@ public class MovieService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = "movies", key = "#dto.parentMovieId")
+            @CacheEvict(value = "movies", key = "#dto.parentMovieId"),
+            @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
+            @CacheEvict(value = "moviesList", allEntries = true)
     })
     public UUID upsertEpisodes(EpisodeRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
@@ -81,6 +85,14 @@ public class MovieService {
         return saveMovie(movie);
     }
 
+    @Cacheable(
+            value = "moviesList",
+            key = "#pagination.page() + ':' + " +
+                    "#pagination.size() + ':' + " +
+                    "#pagination.search().value() + ':' + " +
+                    "#pagination.search().categoryId() + ':' + " +
+                    "#pagination.search().type()"
+    )
     public PageWrapper list(Pagination<Search> pagination) {
         Search search = pagination.search();
         Page<MovieResponseDto> page = movieRepository.findAll(search.value(), search.categoryId(), search.type(), PageRequest.of(pagination.page(), pagination.size()));
