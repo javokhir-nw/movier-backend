@@ -37,30 +37,30 @@ public class RedisConfig {
                 "categories",
                 configFor(
                         new TypeReference<List<CategoryDto>>() {},
-                        Duration.ofHours(1)
+                        Duration.ofDays(1)
                 ),
 
                 "sources",
                 configFor(
                         new TypeReference<List<SourceDto>>() {},
-                        Duration.ofHours(1)
+                        Duration.ofDays(1)
                 ),
 
                 "movies",
                 configFor(
                         MovieResponseDto.class,
-                        Duration.ofMinutes(10)
+                        Duration.ofHours(10)
                 ),
 
                 "moviesList",
                 configFor(
                         PageWrapper.class,
-                        Duration.ofMinutes(10)
+                        Duration.ofHours(10)
                 )
         );
 
         return RedisCacheManager.builder(factory)
-                .cacheDefaults(defaultConfig(Duration.ofMinutes(10)))
+                .cacheDefaults(defaultConfig(Duration.ofDays(1)))
                 .withInitialCacheConfigurations(configs)
                 .build();
     }

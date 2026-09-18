@@ -14,6 +14,7 @@ import com.javier.movier.utils.PageWrapper;
 import com.javier.movier.utils.Pagination;
 import com.javier.movier.utils.Search;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -41,6 +42,7 @@ public class MovieService {
             @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
             @CacheEvict(value = "moviesList", allEntries = true)
     })
+    @Transactional
     public UUID upsertMovie(MovieRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
@@ -53,6 +55,7 @@ public class MovieService {
             @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
             @CacheEvict(value = "moviesList", allEntries = true)
     })
+    @Transactional
     public UUID upsertSeries(SeriesRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
@@ -65,6 +68,7 @@ public class MovieService {
             @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
             @CacheEvict(value = "moviesList", allEntries = true)
     })
+    @Transactional
     public UUID upsertEpisodes(EpisodeRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
