@@ -38,7 +38,9 @@ public class SecurityConfig {
             "/movie/list",
             "/movie/get/{id}",
             "/category/list",
-            "/source/list"
+            "/source/list",
+            "/actor/list",
+            "/country/list"
     };
 
     @Bean

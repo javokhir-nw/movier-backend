@@ -5,6 +5,7 @@ import com.javier.movier.movie.MovieRepository;
 import com.javier.movier.season.Season;
 import com.javier.movier.season.SeasonRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,13 @@ public class MovieSeasonService {
         movieSeason = movieSeasonRepository.save(movieSeason);
 
         return movieSeason.getId();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (!movieSeasonRepository.existsById(id)) {
+            throw new EntityNotFoundException("Bunday mavsum mavjud emas!");
+        }
+        movieSeasonRepository.deleteById(id);
     }
 }

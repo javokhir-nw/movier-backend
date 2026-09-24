@@ -1,6 +1,10 @@
 package com.javier.movier.movie;
 
+import com.javier.movier.actor.Actor;
+import com.javier.movier.actor.ActorRepository;
 import com.javier.movier.category.CategoryRepository;
+import com.javier.movier.country.Country;
+import com.javier.movier.country.CountryRepository;
 import com.javier.movier.episode.EpisodeRequestDto;
 import com.javier.movier.media.MediaRequestDto;
 import com.javier.movier.movieseason.MovieSeason;
@@ -37,6 +41,8 @@ public class MovieService {
     private final CategoryRepository categoryRepository;
     private final SourceRepository sourceRepository;
     private final MovieSeasonRepository movieSeasonRepository;
+    private final ActorRepository actorRepository;
+    private final CountryRepository countryRepository;
 
     @Caching(evict = {
             @CacheEvict(value = "movies", key = "#dto.id",condition = "#dto.id != null"),
@@ -47,7 +53,10 @@ public class MovieService {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
         setSources(movie, dto.getSources());
-        setCategories(movie,dto.getCategoryIds());
+        setCategories(movie, dto.getCategoryIds());
+        setActors(movie, dto.getActorIds());
+        setDirector(movie, dto.getDirectorId());
+        setCountry(movie, dto.getCountryId());
         return saveMovie(movie);
     }
 
@@ -59,7 +68,10 @@ public class MovieService {
     public UUID upsertSeries(SeriesRequestDto dto) {
         Movie movie = findByIdOrElseCreate(dto.getId());
         setCommonFields(movie, dto);
-        setCategories(movie,dto.getCategoryIds());
+        setCategories(movie, dto.getCategoryIds());
+        setActors(movie, dto.getActorIds());
+        setDirector(movie, dto.getDirectorId());
+        setCountry(movie, dto.getCountryId());
         return saveMovie(movie);
     }
 
@@ -95,11 +107,12 @@ public class MovieService {
                     "#pagination.size() + ':' + " +
                     "#pagination.search().value() + ':' + " +
                     "#pagination.search().categoryId() + ':' + " +
+                    "#pagination.search().countryId() + ':' + " +
                     "#pagination.search().type()"
     )
     public PageWrapper list(Pagination<Search> pagination) {
         Search search = pagination.search();
-        Page<MovieResponseDto> page = movieRepository.findAll(search.value(), search.categoryId(), search.type(), PageRequest.of(pagination.page(), pagination.size()));
+        Page<MovieResponseDto> page = movieRepository.findAll(search.value(), search.categoryId(), search.type(), search.countryId(), PageRequest.of(pagination.page(), pagination.size()));
         return PageWrapper.builder().content(page.getContent()).total(page.getTotalElements()).build();
     }
 
@@ -122,8 +135,30 @@ public class MovieService {
         return dto;
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "movies", key = "#id"),
+            @CacheEvict(value = "moviesList", allEntries = true)
+    })
+    @Transactional
+    public void deleteMovie(UUID id) {
+        if (!movieRepository.existsById(id)) {
+            throw new EntityNotFoundException("Bunday kino mavjud emas!");
+        }
+        movieRepository.deleteById(id);
+        log.info("Kino o'chirildi! ID: {}", id);
+    }
 
-
+    @Caching(evict = {
+            @CacheEvict(value = "movies", key = "#id"),
+            @CacheEvict(value = "moviesList", allEntries = true)
+    })
+    @Transactional
+    public void deleteEpisode(UUID id) {
+        Movie episode = findById(id);
+        UUID parentId = episode.getParentMovie() != null ? episode.getParentMovie().getId() : null;
+        movieRepository.deleteById(id);
+        log.info("Qism o'chirildi! ID: {}", id);
+    }
 
     private void setCommonFields(Movie movie, MediaRequestDto dto) {
         UUID movieId = dto.getId();
@@ -172,7 +207,35 @@ public class MovieService {
         }
     }
 
-    private void setCategories(Movie movie,Set<Long> categoryIds){
-        movie.setCategories(new HashSet<>(categoryRepository.findAllById(categoryIds)));
+    private void setCategories(Movie movie, Set<Long> categoryIds){
+        if (categoryIds != null) {
+            movie.setCategories(new HashSet<>(categoryRepository.findAllById(categoryIds)));
+        }
+    }
+
+    private void setActors(Movie movie, Set<Long> actorIds) {
+        if (actorIds != null) {
+            movie.setActors(new HashSet<>(actorRepository.findAllById(actorIds)));
+        }
+    }
+
+    private void setDirector(Movie movie, Long directorId) {
+        if (directorId != null) {
+            Actor director = actorRepository.findById(directorId)
+                    .orElseThrow(() -> new EntityNotFoundException("Bunday rejissyor mavjud emas!"));
+            movie.setDirector(director);
+        } else {
+            movie.setDirector(null);
+        }
+    }
+
+    private void setCountry(Movie movie, Long countryId) {
+        if (countryId != null) {
+            Country country = countryRepository.findById(countryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Bunday mamlakat mavjud emas!"));
+            movie.setCountry(country);
+        } else {
+            movie.setCountry(null);
+        }
     }
 }

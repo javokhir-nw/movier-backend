@@ -44,4 +44,11 @@ public class MovieController {
 
         return ResponseEntity.ok(movieService.getById(id));
     }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('delete movie')")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        movieService.deleteMovie(id);
+        return ResponseEntity.ok().build();
+    }
 }

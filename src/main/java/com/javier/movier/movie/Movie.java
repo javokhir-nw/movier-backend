@@ -1,17 +1,16 @@
 package com.javier.movier.movie;
 
+import com.javier.movier.actor.Actor;
 import com.javier.movier.category.Category;
 import com.javier.movier.comment.Comment;
+import com.javier.movier.country.Country;
 import com.javier.movier.movieseason.MovieSeason;
 import com.javier.movier.moviesource.MovieSource;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -51,6 +50,22 @@ public class Movie {
 
     @Column(name = "view_count")
     private Integer viewCount = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "director_id")
+    private Actor director;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movies_actors",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private Set<Actor> actors = new HashSet<>();
 
     //todo for series
 

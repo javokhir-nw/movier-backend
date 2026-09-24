@@ -19,4 +19,7 @@ public class MediaRequestDto {
     private String imageUrl;
     private Integer orderNumber;
     private Set<Long> categoryIds;
+    private Set<Long> actorIds;
+    private Long directorId;
+    private Long countryId;
 }

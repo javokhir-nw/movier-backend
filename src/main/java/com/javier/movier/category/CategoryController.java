@@ -22,4 +22,11 @@ public class CategoryController {
     public ResponseEntity<?> list(){
         return ResponseEntity.status(200).body(categoryService.list());
     }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('delete category')")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        categoryService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -18,6 +18,7 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
             where (?1 is null or m.description ilike %?1% or m.title ilike %?1%)
             and (?2 is null or c.id = ?2)
             and (?3 is null or m.type = ?3) and m.type != 'EPISODE'
+            and (?4 is null or m.country.id = ?4)
             """)
-    Page<MovieResponseDto> findAll(String value, Long categoryId, MovieType type, Pageable pageable);
+    Page<MovieResponseDto> findAll(String value, Long categoryId, MovieType type, Long countryId, Pageable pageable);
 }

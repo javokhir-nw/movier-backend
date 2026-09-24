@@ -40,4 +40,14 @@ public class CategoryService {
     public List<CategoryDto> list() {
         return categoryRepository.findAll().stream().map(CategoryDto::new).toList();
     }
+
+    @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
+    public void delete(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Bunday kategoriya mavjud emas!");
+        }
+        categoryRepository.deleteById(id);
+        log.info("Kategoriya o'chirildi! ID: {}", id);
+    }
 }

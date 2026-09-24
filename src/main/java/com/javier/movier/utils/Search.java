@@ -5,6 +5,7 @@ import com.javier.movier.movie.MovieType;
 public record Search(
         String value,
         Long categoryId,
+        Long countryId,
         MovieType type
 ) {
 }
