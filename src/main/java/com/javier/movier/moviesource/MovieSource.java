@@ -2,6 +2,7 @@ package com.javier.movier.moviesource;
 
 import com.javier.movier.movie.Movie;
 import com.javier.movier.source.Source;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "movies_sources")
-public class MovieSource {
+public class MovieSource extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,3 +27,4 @@ public class MovieSource {
     @JoinColumn(name = "source_id")
     private Source source;
 }
+

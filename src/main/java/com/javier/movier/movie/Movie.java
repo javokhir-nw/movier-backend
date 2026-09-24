@@ -6,6 +6,7 @@ import com.javier.movier.comment.Comment;
 import com.javier.movier.country.Country;
 import com.javier.movier.movieseason.MovieSeason;
 import com.javier.movier.moviesource.MovieSource;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ import java.util.*;
 @Setter
 @Entity
 @Table(name = "movies")
-public class Movie {
+public class Movie extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -83,3 +84,4 @@ public class Movie {
     @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieSeason> movieSeasons = new ArrayList<>();
 }
+

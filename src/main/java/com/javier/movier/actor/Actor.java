@@ -1,6 +1,7 @@
 package com.javier.movier.actor;
 
 import com.javier.movier.movie.Movie;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "actors")
-public class Actor {
+public class Actor extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,3 +31,4 @@ public class Actor {
     @OneToMany(mappedBy = "director")
     private Set<Movie> directedMovies = new HashSet<>();
 }
+

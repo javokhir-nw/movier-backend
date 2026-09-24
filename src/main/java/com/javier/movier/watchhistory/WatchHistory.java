@@ -2,13 +2,14 @@ package com.javier.movier.watchhistory;
 
 import com.javier.movier.movie.Movie;
 import com.javier.movier.user.User;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "watch_history")
-public class WatchHistory {
+public class WatchHistory extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

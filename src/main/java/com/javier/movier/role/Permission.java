@@ -18,3 +18,4 @@ public class Permission {
 
     private String name;
 }
+

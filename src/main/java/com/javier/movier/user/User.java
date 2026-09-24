@@ -3,6 +3,7 @@ package com.javier.movier.user;
 import com.javier.movier.comment.Comment;
 import com.javier.movier.movie.Movie;
 import com.javier.movier.role.Role;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -49,3 +50,4 @@ public class User {
     )
     private Set<Movie> favouriteMovies;
 }
+

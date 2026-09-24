@@ -1,5 +1,6 @@
 package com.javier.movier.source;
 
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "sources")
-public class Source {
+public class Source extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,3 +19,4 @@ public class Source {
 
     private Integer orderNumber;
 }
+

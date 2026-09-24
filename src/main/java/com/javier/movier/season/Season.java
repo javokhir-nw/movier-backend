@@ -1,5 +1,6 @@
 package com.javier.movier.season;
 
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "seasons")
-public class Season {
+public class Season extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,3 +19,4 @@ public class Season {
 
     private Integer orderNumber;
 }
+

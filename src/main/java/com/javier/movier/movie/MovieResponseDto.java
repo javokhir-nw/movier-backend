@@ -12,6 +12,8 @@ import lombok.Setter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.Date;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -31,6 +33,7 @@ public class MovieResponseDto {
     private List<ActorDto> actors;
     private ActorDto director;
     private CountryDto country;
+    private Date createdAt;
 
     public MovieResponseDto(Movie m) {
         this.id = m.getId();
@@ -52,5 +55,6 @@ public class MovieResponseDto {
                 : List.of();
         this.director = m.getDirector() != null ? new ActorDto(m.getDirector()) : null;
         this.country = m.getCountry() != null ? new CountryDto(m.getCountry()) : null;
+        this.createdAt = m.getCreatedAt();
     }
 }

@@ -3,6 +3,7 @@ package com.javier.movier.movieseason;
 import com.javier.movier.movie.Movie;
 import com.javier.movier.season.Season;
 import com.javier.movier.source.Source;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "movies_seasons")
-public class MovieSeason {
+public class MovieSeason extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

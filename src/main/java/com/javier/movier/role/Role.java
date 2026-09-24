@@ -1,5 +1,6 @@
 package com.javier.movier.role;
 
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -34,3 +35,4 @@ public class Role {
     )
     private Set<Permission> permissions;
 }
+

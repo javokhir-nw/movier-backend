@@ -1,6 +1,7 @@
 package com.javier.movier.country;
 
 import com.javier.movier.movie.Movie;
+import com.javier.movier.utils.Auditable;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "countries")
-public class Country {
+public class Country extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,3 +28,4 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private Set<Movie> movies = new HashSet<>();
 }
+
